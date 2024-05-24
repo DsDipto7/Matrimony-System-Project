@@ -1,0 +1,85 @@
+Function: to retrieve the occupation name for a provided occupation ID from the Occupation table
+
+
+
+ set serveroutput on
+create or replace function getOccupation(var1 in number) return varchar2 AS
+    occ_name Occupation.occupation_name%type;
+begin
+    select occupation_name into occ_name from Occupation where occupation_id = var1; 
+    return occ_name;
+end;
+/ 
+
+-- Calling the function
+set serveroutput on
+declare 
+    occupation_name varchar2(50);
+begin
+    occupation_name := getOccupation(3);
+    dbms_output.put_line('Occupation Name: ' || occupation_name);
+end;
+/
+        
+
+
+
+trigger:
+
+set serveroutput on
+create or replace trigger tri
+after update on person
+for each row
+begin
+    update occupation
+    set occupation_name = :new.name
+    where person_id = :new.person_id;
+end;
+/
+  
+
+update person
+set name = 'Police'
+where person_id = 1;
+
+
+select * from occupation where person_id = 1;
+
+
+
+Join:
+
+select * from Person natural join Occupation;
+select name, religion_name from Person left outer join Religion using (person_id);
+SELECT Person.name, Religion.religion_name FROM Person RIGHT OUTER JOIN Religion ON Person.person_id = Religion.person_id;
+SELECT Person.name, Religion.religion_name FROM Person FULL OUTER JOIN Religion ON Person.person_id = Religion.person_id;
+
+
+
+
+procedure: updating the age of a person in the Person 
+
+create or replace procedure updateAge(p_person_id in number, p_new_age in number) is
+begin
+    update Person
+    set age = p_new_age
+    where person_id = p_person_id;
+end;
+/
+   
+
+begin
+    
+    updateAge(1, 35); -- Example: Update age to 35 for person_id = 1
+   
+end;
+/
+
+
+
+sub-query:Find the persons who are 'Married' and have the occupation 'Teacher'.
+
+Select *
+from Person
+where person_id in (Select person_id FROM Matrimony where status_id = (Select status_id from MaritalStatus Where status_name = 'Married'))
+AND person_id IN (Select person_id from Occupation Where occupation_name = 'Teacher');
