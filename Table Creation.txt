@@ -1,0 +1,61 @@
+
+Create table Person (
+    person_id int,
+    name varchar(50),
+    age int,
+    gender varchar(10),
+    email varchar(50),
+    phone varchar(20),
+    primary key(person_id)
+);
+
+Create table Location (
+    location_id int,
+     person_id int,
+    city varchar(50), 
+    country varchar(50),
+    primary key(location_id),
+   foreign key(person_id) references Person(person_id)
+
+);
+
+Create table Religion (
+    person_id int,
+    religion_id int,
+    religion_name varchar(50),
+    primary key(religion_id),
+    foreign key(person_id) references Person(person_id)
+);
+
+Create table  MaritalStatus (
+    status_id int,
+    person_id int,
+    status_name VARCHAR(50),
+    primary key(status_id),
+    foreign key(person_id) references Person(person_id)
+
+);
+
+Create table Occupation (
+    occupation_id int,
+    person_id int,
+    occupation_name varchar(50),
+    primary key(occupation_id),
+    foreign key(person_id) references Person(person_id)
+
+);
+
+Create table  Matrimony (
+    matrimony_id int ,
+    person_id int,
+    location_id int,
+    religion_id int,
+    status_id int,
+    occupation_id int,
+    primary key(matrimony_id),
+    foreign key (person_id) references Person(person_id),
+    foreign key (location_id)references Location(location_id),
+    foreign key (religion_id) references Religion(religion_id),
+    foreign key (status_id) references MaritalStatus(status_id),
+    foreign key (occupation_id)references Occupation(occupation_id)
+);
